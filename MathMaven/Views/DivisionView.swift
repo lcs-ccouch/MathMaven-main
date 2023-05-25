@@ -9,29 +9,30 @@ import SwiftUI
 
 struct DivisionView: View {
     
-        
-        // MARK: Stored properties
-        
-        // The numbers to be subtracted
-        @State var firstValue = Int.random(in: 1...144)
-        @State var secondValue = 0  // Will be updated once view loads
-        
-        // Holds whatever input was provided by the user
-        @State var input = ""
-        
-        // Has the user's answer been checked?
-        @State var answerChecked = false
-        
-        // Was the user's given answer correct?
-        @State var answerCorrect = false
-        
-        // MARK: Computed properties
-
-        // The correct response
-        var correctResponse: Int {
-            return firstValue - secondValue
-        }
-
+    
+    // MARK: Stored properties
+    
+    // The numbers to be subtracted
+    @State var firstValue = Int.random(in: 1...144)
+    @State var secondValue = Int.random(in: 1...72)
+    
+    // Holds whatever input was provided by the user
+    @State var input = ""
+    
+    // Has the user's answer been checked?
+    @State var answerChecked = false
+    
+    // Was the user's given answer correct?
+    @State var answerCorrect = false
+    
+    // MARK: Computed properties
+    
+    // The correct response
+    var correctResponse: Int {
+        return Int((firstValue/secondValue))
+       
+    }
+    
     
     // The user interface to show
     var body: some View {
@@ -80,15 +81,59 @@ struct DivisionView: View {
                 .multilineTextAlignment(.trailing)
             }
             .padding(.horizontal)
-        }
-
-        VStack {
-            Text("Division")
-            Text(Operation.division.rawValue)
+            
+            
+            
+            // 3. Check answer
+            //    Only show button when answer has not already been checked
+            if answerChecked == false {
+                
+                CheckAnswerButtonView(input: input,
+                                      correctResponse: correctResponse,
+                                      answerChecked: $answerChecked,
+                                      answerCorrect: $answerCorrect)
+                
+            } else {
+                
+                // 4. Generate new question
+                // Only show this once an answer has been provided
+                Button(action: {
+                    generateNewQuestion()
+                }, label: {
+                    Text("New question")
+                        .font(.largeTitle)
+                })
+                .padding()
+                .buttonStyle(.bordered)
+                
+            }
+            
+            // Push interface up to top of screen
+            Spacer()
+            
         }
         .font(Font.custom("SF Pro", size: 64))
     }
+    // MARK: Functions
+    
+    // Generate a new question
+    func generateNewQuestion() {
+        
+        // Generate a new question
+        firstValue = Int.random(in: 1...72)
+        secondValue = Int.random(in: 1...72)
+
+        // Reset properties that track what's happening with the current question
+        answerChecked = false
+        answerCorrect = false
+        
+        // Reset the input field
+        input = ""
+
+    }
 }
+
+
 
 struct DivisionView_Previews: PreviewProvider {
     static var previews: some View {
