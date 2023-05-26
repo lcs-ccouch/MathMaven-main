@@ -21,6 +21,7 @@ struct DivisionView: View {
             Text("Division")
                 .font(.largeTitle)
                 .padding(.bottom, 20)
+                .fontWeight(.bold)
             
             Text("\(firstValue) ÷ \(secondValue)")
                 .font(.title)
